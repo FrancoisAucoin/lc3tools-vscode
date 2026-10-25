@@ -1,0 +1,100 @@
+{
+    "name": "LC-3 ISA Assembly",
+    "scopeName": "source.lc3-asm",
+    "patterns": [
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#registers"
+        },
+        {
+            "include": "#opcodes-control"
+        },
+        {
+            "include": "#opcodes-general"
+        },
+        {
+            "include": "#pseudo-opcodes"
+        },
+        {
+            "include": "#numbers"
+        },
+        {
+            "include": "#labels-catch-all"
+        }
+    ],
+    "repository": {
+        "strings": {
+            "name": "string.quoted.double.lc3-isa-asm",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [
+                {
+                    "name": "constant.character.escape.lc3-isa-asm",
+                    "match": "\\\\."
+                }
+            ]
+        },
+        "comments": {
+            "name": "comment.line.semicolon.lc3-isa-asm",
+            "match": ";.*$"
+        },
+        "opcodes-control": {
+            "patterns": [
+                {
+                    "name": "keyword.control.lc3-isa-asm",
+                    "match": "(?i)\\b(JMP|JSR|JSRR|RET|RTI)\\b"
+                },
+                {
+                    "name": "keyword.control.lc3-isa-asm",
+                    "match": "(?i)\\b(BR|BRn|BRz|BRp|BRnz|BRzp|BRnp|BRnzp)\\b"
+                }
+            ]
+        },
+        "opcodes-general": {
+            "patterns": [
+                {
+                    "name": "support.function.lc3-isa-asm",
+                    "match": "(?i)\\b(ADD|AND|LD|LDI|LDR|LEA|NOT|ST|STI|STR|TRAP)\\b"
+                },
+                {
+                    "name": "support.function.lc3-isa-asm",
+                    "match": "(?i)\\b(GETC|OUT|PUTS|IN|PUTSP|HALT)\\b"
+                }
+            ]
+        },
+        "pseudo-opcodes": {
+            "patterns": [
+                {
+                    "name": "keyword.directive.lc3-isa-asm",
+                    "match": "(?i)(?<![a-zA-Z0-9_])\\.(ORIG|END|FILL|STRINGZ|BLKW)\\b"
+                }
+            ]
+        },
+        "registers": {
+            "patterns": [
+                {
+                    "name": "variable.parameter.register.lc3-isa-asm",
+                    "match": "(?i)\\b(R0|R1|R2|R3|R4|R5|R6|R7)\\b"
+                }
+            ]
+        },
+        "numbers": {
+            "patterns": [
+                {
+                    "name": "constant.numeric.lc3-isa-asm",
+                    "match": "(?i)(?<![a-zA-Z0-9_])(#?-?[0-9]+|x[0-9a-fA-F]+|b[01]+)(?![a-zA-Z0-9_])"
+                }
+            ]
+        },
+        "labels-catch-all": {
+            "comment": "TODO: Anything that survived the preceding rules is treated as a label. One downside to this approach is that we don't make a difference between a label definition and label referencing.",
+            "match": "\\b[a-zA-Z_]\\w*\\b",
+            "name": "entity.name.label.lc3-isa-asm"
+        }
+    }
+}

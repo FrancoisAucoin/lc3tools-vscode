@@ -1,0 +1,23 @@
+{
+    "LC-3 Assembly Template": {
+        "prefix": "lc3_asm_template",
+        "body": [
+            "    .ORIG    ${1:x3000}",
+            "    HALT",
+            "    .END"
+        ],
+        "description": "Bare minimum LC-3 ISA Assembly template"
+    },
+    "LC-3 Assembly Hello World": {
+        "prefix": "lc3_asm_hello",
+        "body": [
+            "           .ORIG       x3000",
+            "           LEA         R0,MESSAGE    ; load message address into R0",
+            "           PUTS                      ; write loaded ASCII string to console",
+            "           HALT                      ; halt execution",
+            "MESSAGE    .STRINGZ    \"Hello, World!\\n\"",
+            "           .END"
+        ],
+        "description": "A simple 'Hello, World!' LC-3 ISA Assembly program"
+    }
+}

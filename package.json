@@ -1,0 +1,289 @@
+{
+    "name": "lc3tools",
+    "icon": "vscode-extension-icon.png",
+    "displayName": "LC3Tools",
+    "description": "Provides support for the LC-3 ISA Assembly language and bundles a Wasm version of the LC3Tools assembler (used for validating and assembling) and simulator (used for running programs in an integrated terminal).",
+    "version": "0.0.1",
+    "author": {
+        "email": "frank@aucoinstats.com",
+        "name": "François Aucoin",
+        "url": "https://github.com/FrancoisAucoin"
+    },
+    "repository": {
+        "url": "https://github.com/FrancoisAucoin/lc3tools-vscode"
+    },
+    "license": "Apache-2.0",
+    "engines": {
+        "vscode": "^1.136.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "Education",
+        "Formatters"
+    ],
+    "activationEvents": [],
+    "main": "./out/extension.js",
+    "contributes": {
+        "snippets": [
+            {
+                "language": "lc3-isa-asm",
+                "path": "./snippets/lc3-isa-assembly.json"
+            }
+        ],
+        "configurationDefaults": {
+            "[lc3-isa-asm]": {
+                "editor.insertSpaces": true,
+                "editor.tabSize": 4,
+                "editor.detectIndentation": false
+            }
+        },
+        "configuration": [
+            {
+                "title": "LC3Tools Extension Configuration",
+                "properties": {
+                    "lc3Tools.validateOnSave": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Performs validation when opening and saving an LC-3 ISA assembly file.",
+                        "scope": "resource"
+                    },
+                    "lc3Tools.notifyOnAssembled": {
+                        "type": "string",
+                        "enum": [
+                            "never",
+                            "showBanner",
+                            "revealFile"
+                        ],
+                        "enumDescriptions": [
+                            "Never notify",
+                            "Show an information banner with a button to open the created file",
+                            "Open the generated object file in the editor"
+                        ],
+                        "markdownDescription": "How to notify the user upon successful assembly (i.e., the generation of an object file from the assembly file).",
+                        "default": "never",
+                        "scope": "resource"
+                    },
+                    "lc3Tools.codeLensesEnabled": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Whether CodeLenses are enabled for labels.",
+                        "scope": "resource"
+                    },
+                    "lc3Tools.revealLogs": {
+                        "type": "string",
+                        "enum": [
+                            "error",
+                            "always",
+                            "never"
+                        ],
+                        "enumDescriptions": [
+                            "Only reveal the OUTPUT panel when validation fails",
+                            "Reveal the OUTPUT panel whenever a validation completes",
+                            "Never automatically reveal the OUTPUT panel upon validation completion"
+                        ],
+                        "default": "never",
+                        "markdownDescription": "When to reveal validation-related logs in the OUTPUT panel area. Note that, for now, this is a \"window only\" setting, and that all workspaces use the same output channel.",
+                        "scope": "window"
+                    },
+                    "lc3Tools.formatter.enabled": {
+                        "type": "boolean",
+                        "default": true,
+                        "markdownDescription": "Enables the LC-3 ISA Assembly formatter.",
+                        "scope": "resource"
+                    },
+                    "lc3Tools.formatter.useLowerCase": {
+                        "type": "boolean",
+                        "default": false,
+                        "markdownDescription": "Whether to use lowercase instead of uppercase. This applies to opcodes, pseudo-opcodes, labels, and registers.",
+                        "scope": "resource"
+                    },
+                    "lc3Tools.formatter.useSpaceAfterCommas": {
+                        "type": "boolean",
+                        "default": false,
+                        "markdownDescription": "Whether to use a space after (to the right of) a comma (that separates operands).",
+                        "scope": "resource"
+                    },
+                    "lc3Tools.simulator.openTerminalInEditorArea": {
+                        "type": "boolean",
+                        "default": false,
+                        "markdownDescription": "Whether to open the simulator terminal in the editor area, as opposed to the default TERMINAL area.",
+                        "scope": "resource"
+                    },
+                    "lc3Tools.simulator.logLevel": {
+                        "markdownDescription": "The logging level (corresponding to the LC3Tools simulator's `--print-level` flag) to use for simulator sessions.",
+                        "default": 0,
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9,
+                        "scope": "resource"
+                    }
+                }
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "lc3tools.runSimulator",
+                "key": "shift+ctrl+r",
+                "mac": "shift+cmd+r",
+                "when": "editorTextFocus && editorLangId == lc3-isa-asm"
+            },
+            {
+                "command": "lc3tools.assemble",
+                "key": "shift+ctrl+b",
+                "mac": "shift+cmd+b",
+                "when": "editorTextFocus && editorLangId == lc3-isa-asm"
+            },
+            {
+                "command": "lc3tools.validate",
+                "key": "shift+ctrl+v",
+                "mac": "shift+cmd+v",
+                "when": "editorTextFocus && editorLangId == lc3-isa-asm"
+            }
+        ],
+        "commands": [
+            {
+                "command": "lc3tools.validate",
+                "title": "LC3Tools: Validate"
+            },
+            {
+                "command": "lc3tools.assemble",
+                "title": "LC3Tools: Assemble",
+                "icon": "$(build)"
+            },
+            {
+                "command": "lc3tools.runSimulatorForMultipleSources",
+                "title": "LC3Tools: Run Simulator (Multi-Source)"
+            },
+            {
+                "command": "lc3tools.runSimulator",
+                "title": "LC3Tools: Run Simulator",
+                "icon": "$(play)"
+            }
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "lc3tools.validate",
+                    "when": "editorLangId == lc3-isa-asm"
+                },
+                {
+                    "command": "lc3tools.assemble",
+                    "when": "editorLangId == lc3-isa-asm"
+                },
+                {
+                    "command": "lc3tools.runSimulatorForMultipleSources"
+                },
+                {
+                    "command": "lc3tools.runSimulator",
+                    "when": "editorLangId == lc3-isa-asm"
+                }
+            ],
+            "editor/context": [
+                {
+                    "command": "lc3tools.validate",
+                    "when": "editorLangId == lc3-isa-asm",
+                    "group": "navigation@12"
+                },
+                {
+                    "command": "lc3tools.assemble",
+                    "when": "editorLangId == lc3-isa-asm",
+                    "group": "navigation@11"
+                },
+                {
+                    "command": "lc3tools.runSimulator",
+                    "when": "editorLangId == lc3-isa-asm",
+                    "group": "navigation@10"
+                }
+            ],
+            "editor/title": [
+                {
+                    "command": "lc3tools.assemble",
+                    "when": "editorLangId == lc3-isa-asm",
+                    "group": "navigation"
+                },
+                {
+                    "command": "lc3tools.runSimulator",
+                    "when": "editorLangId == lc3-isa-asm",
+                    "group": "navigation"
+                },
+                {
+                    "command": "lc3tools.runSimulator",
+                    "when": "resourceExtname == .obj",
+                    "group": "navigation"
+                }
+            ],
+            "editor/title/context": [
+                {
+                    "command": "lc3tools.runSimulator",
+                    "when": "resourceExtname == .obj",
+                    "group": "navigation"
+                },
+                {
+                    "command": "lc3tools.runSimulator",
+                    "group": "navigation@0",
+                    "when": "resourceLangId == lc3-isa-asm"
+                },
+                {
+                    "command": "lc3tools.assemble",
+                    "group": "navigation@1",
+                    "when": "resourceLangId == lc3-isa-asm"
+                },
+                {
+                    "command": "lc3tools.validate",
+                    "when": "resourceLangId == lc3-isa-asm",
+                    "group": "navigation@2"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "lc3tools.validate",
+                    "group": "navigation@2",
+                    "when": "resourceLangId == lc3-isa-asm"
+                },
+                {
+                    "command": "lc3tools.runSimulator",
+                    "group": "navigation@0",
+                    "when": "resourceLangId == lc3-isa-asm || resourceExtname == .obj"
+                },
+                {
+                    "command": "lc3tools.assemble",
+                    "group": "navigation@1",
+                    "when": "resourceLangId == lc3-isa-asm"
+                }
+            ]
+        },
+        "languages": [
+            {
+                "id": "lc3-isa-asm",
+                "aliases": [
+                    "LC-3 ISA Assembly"
+                ],
+                "extensions": [
+                    ".asm",
+                    ".lc3-asm"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "lc3-isa-asm",
+                "scopeName": "source.lc3-asm",
+                "path": "./syntaxes/lc3-asm.tmLanguage.json"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "lint": "eslint src"
+    },
+    "devDependencies": {
+        "@types/node": "24.x",
+        "@types/vscode": "^1.136.0",
+        "eslint": "^10.5.0",
+        "typescript": "^6.0.3",
+        "typescript-eslint": "^8.61.1"
+    }
+}
