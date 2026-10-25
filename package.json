@@ -11,7 +11,8 @@
         "url": "https://github.com/FrancoisAucoin"
     },
     "repository": {
-        "url": "https://github.com/FrancoisAucoin/lc3tools-vscode"
+        "url": "https://github.com/FrancoisAucoin/lc3tools-vscode",
+        "type": "git"
     },
     "copyright": "Copyright (c) 2026 François Aucoin. All rights reserved.",
     "license": "Apache-2.0",

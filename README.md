@@ -29,11 +29,11 @@ either a single file or multiple files (either object files or, more convenientl
 
 ### Preview 1: Hello, World!
 This is a simple "Hello, World!" preview that illustrates most of the [main features](#features) listed above. _Note that the label CodeLenses are not visible because the feature was implemented after the video was recorded._
-<video src="https://raw.githubusercontent.com/FrancoisAucoin/lc3tools-vscode/refs/heads/main/assets/hello.mp4" controls width="100%" muted></video>
-    
+![hello world preview](assets/hello.gif)
+
 ### Preview 2: Multi-source simulation
 This second preview illustrates how to use the "multi-source simulation" feature, which allows starting a simulator session loading multiple related source (or object) files.
-<video src="https://raw.githubusercontent.com/FrancoisAucoin/lc3tools-vscode/refs/heads/main/assets/multi-source.mp4" controls width="100%" muted></video>
+![multi-source preview](assets/multi-source.gif)
 
 ## Extension Settings
 
