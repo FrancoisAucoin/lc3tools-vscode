@@ -1,6 +1,7 @@
 {
     "name": "lc3tools",
     "icon": "vscode-extension-icon.png",
+    "publisher": "AucoinStatsInc",
     "displayName": "LC3Tools",
     "description": "Provides support for the LC-3 ISA Assembly language and bundles a Wasm version of the LC3Tools assembler (used for validating and assembling) and simulator (used for running programs in an integrated terminal).",
     "version": "0.0.1",
@@ -12,6 +13,7 @@
     "repository": {
         "url": "https://github.com/FrancoisAucoin/lc3tools-vscode"
     },
+    "copyright": "Copyright (c) 2026 François Aucoin. All rights reserved.",
     "license": "Apache-2.0",
     "engines": {
         "vscode": "^1.136.0"
@@ -277,11 +279,16 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "lint": "eslint src"
+        "lint": "eslint src",
+        "prepackage": "npm run lint && npm run compile",
+        "package": "vsce package",
+        "install-local": "npm run package && code --install-extension *.vsix --force",
+        "uninstall-local": "code --uninstall-extension AucoinStatsInc.lc3tools"
     },
     "devDependencies": {
         "@types/node": "24.x",
         "@types/vscode": "^1.136.0",
+        "@vscode/vsce": "^4.0.0",
         "eslint": "^10.5.0",
         "typescript": "^6.0.3",
         "typescript-eslint": "^8.61.1"
