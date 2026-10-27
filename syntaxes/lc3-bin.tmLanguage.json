@@ -1,0 +1,26 @@
+{
+    "name": "LC-3 ISA Binary",
+    "scopeName": "source.lc3-bin",
+    "patterns": [
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#binary"
+        }
+    ],
+    "repository": {
+        "comments": {
+            "name": "comment.line.semicolon.lc3-isa-asm",
+            "match": ";.*$"
+        },
+        "binary": {
+            "patterns": [
+                {
+                    "name": "constant.numeric.lc3-isa-asm",
+                    "match": "[0-1\\s]"
+                }
+            ]
+        }
+    }
+}

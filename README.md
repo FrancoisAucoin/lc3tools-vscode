@@ -6,7 +6,8 @@ of the LC3Tools `assembler` and `simulator` binaries, making it self-contained a
 installation steps. The `assembler` is used by the extension to provide validation and let the 
 user assemble using a simple command. The `simulator` lets the user launch a session directly inside an
 integrated terminal without ever needing to leave VS Code. Simulator sessions can be started from
-either a single file or multiple files (either object files or, more conveniently, source files).
+either a single file or multiple files (either object files or, more conveniently, source files). The extension
+also has limited support for the "binary" text file format (i.e., coloration, validation, assembly, and simulation).
 
 **Disclaimer:** This project is not affiliated with the official 
 [lc3tools repository](https://github.com/chiragsakhuja/lc3tools/tree/master).
@@ -35,6 +36,12 @@ This is a simple "Hello, World!" preview that illustrates most of the [main feat
 This second preview illustrates how to use the "multi-source simulation" feature, which allows starting a simulator session loading multiple related source (or object) files.
 ![multi-source preview](assets/multi-source.gif)
 
+## Supported File Extensions
+
+* **Assembly:** `.asm` or `.lc3-asm`
+* **Binary:** `.bin` or `.lc3-bin`
+* **Object:** `.obj`
+
 ## Extension Settings
 
 This extension contributes the following settings:
@@ -60,13 +67,13 @@ This extension contributes the following commands:
 
 ## Known Issues & Limitations
 
-* This extension does not yet support the "binary language"
-discussed in Chapter 5 of [Patt & Patel's book](#recommended-reading),
-but I will eventually get there.
+* This extension currently only has minimal support for the "binary" text file format
+described in Chapter 5 of [Patt & Patel's book](#recommended-reading), namely: 
+coloration, validation, assembly, and simulation. More to come...
 * Some operations, under specific circumstances, will result in a file being validated twice.
 * Some occasional crashes were observed during development, but the root causes
 could not be isolated. However, it is not clear whether those crashes had to do with the extension itself or with a poisoned debugger state (in which case the extension itself wouldn't be the problem). Please feel free to [create an issue](https://github.com/FrancoisAucoin/lc3tools-vscode/issues) if you encounter a weird crash.
-* The Wasm simulator is noticeably (but not impairingly) slower than the native simulator. The
+* The Wasm simulator is noticeably (but not "impairingly") slower than the native simulator. The
 reasons for that are discussed [here](https://github.com/FrancoisAucoin/lc3tools-cmake-port).
 * The simulator's terminal has minimal functionality: just enough to get things to work. It doesn't
 support features like arrow navigation and history. The limitations are discussed
@@ -79,7 +86,7 @@ patterns here and there, which, looking back, are far from ideal, although they 
 usability of the extension. Examples of such patterns are the tight coupling with `vscode`,
 which makes code reuse and unit-testing impossible without pulling the huge `vscode` runtime.
 I am also relying on tight coupling between my classes, and some of those classes are likely too
-ambitous in scope and should therefore be broken down into smaller, more specialized classes, etc.
+ambitious in scope and should therefore be broken down into smaller, more specialized classes, etc.
 * The codebase still contains several `// TODO` comments, but a lot of those are no longer relevant. I will have to review them all and clean up the obsolete ones and address the valid ones. In the meantime, take them with a grain of salt.
 
 ## Experimental Status

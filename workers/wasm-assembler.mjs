@@ -38,7 +38,9 @@ parentPort.on("message", async (/** @type {{filePath: string, saveFile: boolean}
     /**  @type {Uint8Array | undefined} */
     let data = undefined;
     /** @type {string} */
-    const filePathWithoutPrefix = filePath.replace(/(\.asm)|(\.lc3-asm)$/i, "");
+    const filePathWithoutPrefix = filePath.replace(/(\.asm|\.lc3-asm|\.bin|\.lc3-bin)$/i, "");
+    /** @type {boolean} */
+    let isBinary = /(\.bin|\.lc3-bin)$/i.test(filePath);
     /** @type {string | undefined} */
     let createdObjectFilePath = undefined;
 
@@ -63,9 +65,9 @@ parentPort.on("message", async (/** @type {{filePath: string, saveFile: boolean}
             printErr: text => { // This is not expected (I don't think that the LC3Tools Assembler uses stderr at all).
                 console.error(text);
             },
-            arguments: [`/${fileId}.asm`],
+            arguments: [`/${fileId}.${isBinary ? "bin" : "asm"}`],
             preRun: [(mod) => {
-                mod.FS.writeFile(`/${fileId}.asm`, readFileSync(filePath, "utf-8"));
+                mod.FS.writeFile(`/${fileId}.${isBinary ? "bin" : "asm"}`, readFileSync(filePath, "utf-8"));
             }],
             postRun: [(mod) => {
                 // TODO: Decide whether we should have another flag called `loadData`,

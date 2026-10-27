@@ -512,7 +512,7 @@ export class Line {
     }
 
     static parseLines(text: string): Line[] {
-        return text.split("\n").map(line => new Line(line));
+        return text.split(/\r?\n/).map(line => new Line(line));
     }
 }
 

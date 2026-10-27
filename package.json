@@ -1,10 +1,10 @@
 {
     "name": "lc3tools",
-    "icon": "vscode-extension-icon.png",
+    "icon": "icons/vscode-extension-icon.png",
     "publisher": "AucoinStatsInc",
     "displayName": "LC3Tools",
     "description": "Provides support for the LC-3 ISA Assembly language and bundles a Wasm version of the LC3Tools assembler (used for validating and assembling) and simulator (used for running programs in an integrated terminal).",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "author": {
         "email": "frank@aucoinstats.com",
         "name": "François Aucoin",
@@ -167,46 +167,46 @@
             "commandPalette": [
                 {
                     "command": "lc3tools.validate",
-                    "when": "editorLangId == lc3-isa-asm"
+                    "when": "editorLangId == lc3-isa-asm || editorLangId == lc3-isa-bin"
                 },
                 {
                     "command": "lc3tools.assemble",
-                    "when": "editorLangId == lc3-isa-asm"
+                    "when": "editorLangId == lc3-isa-asm || editorLangId == lc3-isa-bin"
                 },
                 {
                     "command": "lc3tools.runSimulatorForMultipleSources"
                 },
                 {
                     "command": "lc3tools.runSimulator",
-                    "when": "editorLangId == lc3-isa-asm"
+                    "when": "editorLangId == lc3-isa-asm || editorLangId == lc3-isa-bin"
                 }
             ],
             "editor/context": [
                 {
                     "command": "lc3tools.validate",
-                    "when": "editorLangId == lc3-isa-asm",
+                    "when": "editorLangId == lc3-isa-asm || editorLangId == lc3-isa-bin",
                     "group": "navigation@12"
                 },
                 {
                     "command": "lc3tools.assemble",
-                    "when": "editorLangId == lc3-isa-asm",
+                    "when": "editorLangId == lc3-isa-asm || editorLangId == lc3-isa-bin",
                     "group": "navigation@11"
                 },
                 {
                     "command": "lc3tools.runSimulator",
-                    "when": "editorLangId == lc3-isa-asm",
+                    "when": "editorLangId == lc3-isa-asm || editorLangId == lc3-isa-bin",
                     "group": "navigation@10"
                 }
             ],
             "editor/title": [
                 {
                     "command": "lc3tools.assemble",
-                    "when": "editorLangId == lc3-isa-asm",
+                    "when": "editorLangId == lc3-isa-asm || editorLangId == lc3-isa-bin",
                     "group": "navigation"
                 },
                 {
                     "command": "lc3tools.runSimulator",
-                    "when": "editorLangId == lc3-isa-asm",
+                    "when": "editorLangId == lc3-isa-asm || editorLangId == lc3-isa-bin",
                     "group": "navigation"
                 },
                 {
@@ -224,16 +224,16 @@
                 {
                     "command": "lc3tools.runSimulator",
                     "group": "navigation@0",
-                    "when": "resourceLangId == lc3-isa-asm"
+                    "when": "resourceLangId == lc3-isa-asm || resourceLangId == lc3-isa-bin"
                 },
                 {
                     "command": "lc3tools.assemble",
                     "group": "navigation@1",
-                    "when": "resourceLangId == lc3-isa-asm"
+                    "when": "resourceLangId == lc3-isa-asm || resourceLangId == lc3-isa-bin"
                 },
                 {
                     "command": "lc3tools.validate",
-                    "when": "resourceLangId == lc3-isa-asm",
+                    "when": "resourceLangId == lc3-isa-asm || resourceLangId == lc3-isa-bin",
                     "group": "navigation@2"
                 }
             ],
@@ -241,17 +241,17 @@
                 {
                     "command": "lc3tools.validate",
                     "group": "navigation@2",
-                    "when": "resourceLangId == lc3-isa-asm"
+                    "when": "resourceLangId == lc3-isa-asm || resourceLangId == lc3-isa-bin"
                 },
                 {
                     "command": "lc3tools.runSimulator",
                     "group": "navigation@0",
-                    "when": "resourceLangId == lc3-isa-asm || resourceExtname == .obj"
+                    "when": "resourceLangId == lc3-isa-asm || resourceExtname == .obj || resourceLangId == lc3-isa-bin"
                 },
                 {
                     "command": "lc3tools.assemble",
                     "group": "navigation@1",
-                    "when": "resourceLangId == lc3-isa-asm"
+                    "when": "resourceLangId == lc3-isa-asm || resourceLangId == lc3-isa-bin"
                 }
             ]
         },
@@ -265,7 +265,26 @@
                     ".asm",
                     ".lc3-asm"
                 ],
-                "configuration": "./language-configuration.json"
+                "configuration": "./language-configuration.json",
+                "icon": {
+                    "light": "./icons/asm-icon-32.png",
+                    "dark": "./icons/asm-icon-32.png"
+                }
+            },
+            {
+                "id": "lc3-isa-bin",
+                "aliases": [
+                    "LC-3 ISA Binary"
+                ],
+                "extensions": [
+                    ".bin",
+                    ".lc3-bin"
+                ],
+                "configuration": "./language-configuration.json",
+                "icon": {
+                    "light": "./icons/bin-icon-32.png",
+                    "dark": "./icons/bin-icon-32.png"
+                }
             }
         ],
         "grammars": [
@@ -273,6 +292,11 @@
                 "language": "lc3-isa-asm",
                 "scopeName": "source.lc3-asm",
                 "path": "./syntaxes/lc3-asm.tmLanguage.json"
+            },
+            {
+                "language": "lc3-isa-bin",
+                "scopeName": "source.lc3-bin",
+                "path": "./syntaxes/lc3-bin.tmLanguage.json"
             }
         ]
     },

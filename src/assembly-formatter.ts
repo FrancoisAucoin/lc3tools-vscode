@@ -221,6 +221,10 @@ class AssemblyDocumentFormatter implements vscode.DocumentFormattingEditProvider
             formattedText = formattedText.replaceAll("\t", " ".repeat(options.tabSize));
         }
 
+        if (document.eol === vscode.EndOfLine.CRLF) {
+            formattedText = formattedText.replace(/\n/g, "\r\n");
+        }
+
         return [vscode.TextEdit.replace(fullRange, formattedText)];
     }
 }

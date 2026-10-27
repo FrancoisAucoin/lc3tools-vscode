@@ -160,7 +160,7 @@ export const registerCommands = (basePath: string): vscode.Disposable[] => {
             if (!file.isFile()) {
                 return false;
             }
-            return /(\.obj)|(\.asm)|(\.lc3-asm)$/i.test(file.name);
+            return /(\.obj|\.asm|\.lc3-asm|\.bin|\.lc3-bin)$/i.test(file.name);
         });
 
         const quickPick = vscode.window.createQuickPick();
@@ -222,7 +222,7 @@ export const registerCommands = (basePath: string): vscode.Disposable[] => {
 
         if (!fileURIs
             .map(uri => uri.fsPath.toLowerCase())
-            .every(path => /(\.obj)|(\.asm)|(\.lc3-asm)$/i.test(path))) {
+            .every(path => /(\.obj|\.asm|\.lc3-asm|\.bin|\.lc3-bin)$/i.test(path))) {
             vscode.window.showErrorMessage(`Command '${COMMAND_RUN_SIMULATOR}' failed. This should not happen. Please file an issue.`);
             return;
         }

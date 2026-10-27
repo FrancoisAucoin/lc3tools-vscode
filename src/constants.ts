@@ -14,6 +14,7 @@
 */
 
 export const LANGUAGE_ID = "lc3-isa-asm";
+export const LANGUAGE_ID_BIN = "lc3-isa-bin";
 export const EXTENSION_SHORT_NAME = "lc3tools";
 
 export const CONFIG_PREFIX = "lc3Tools";

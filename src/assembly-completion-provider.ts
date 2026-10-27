@@ -79,11 +79,14 @@ class AssemblyCompletionProvider implements vscode.CompletionItemProvider {
             });
         }
 
-        return items.map(item => {
-            // NOTE: This is OK because it will be ignored if the user has disabled formatting.
-            item.command = { command: "editor.action.formatDocument", title: "Format Document" };
-            return item;
-        });
+        return items;
+
+        // TODO: I had to comment this out for now because it caused issues for some completions.
+        // return items.map(item => {
+        //     // NOTE: This is OK because it will be ignored if the user has disabled formatting.
+        //     item.command = { command: "editor.action.formatDocument", title: "Format Document" };
+        //     return item;
+        // });
     }
 }
 

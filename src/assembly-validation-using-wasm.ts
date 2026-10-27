@@ -86,7 +86,7 @@ class AssemblerOutputValidator {
         if (this._stdout === undefined) {
             throw new Error("expecting '_stdout' to be defined");
         }
-        return this._stdout.split("\n").map(filterOutTerminalColoringCodes);
+        return this._stdout.split(/\r?\n/).map(filterOutTerminalColoringCodes);
     }
     private parseStdoutForError(): void {
         if (!this._failed) {

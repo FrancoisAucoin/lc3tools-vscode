@@ -15,7 +15,9 @@
 
 import * as vscode from "vscode";
 import { AssemblyDiagnosticsUpdater, AssemblyValidator } from './interfaces';
-import { LANGUAGE_ID, CONFIG_PREFIX, CONFIG_VALIDATE_ON_SAVE } from "./constants";
+import { LANGUAGE_ID, LANGUAGE_ID_BIN, EXTENSION_SHORT_NAME, CONFIG_PREFIX, CONFIG_VALIDATE_ON_SAVE } from "./constants";
+
+const LANGUAGE_IDENTIFIERS: string[] = [LANGUAGE_ID, LANGUAGE_ID_BIN];
 
 const shouldValidateOnSave = (uri: vscode.Uri): boolean => {
     const config = vscode.workspace.getConfiguration(CONFIG_PREFIX, uri);
@@ -27,7 +29,7 @@ export class AssemblyDiagnosticManager implements AssemblyDiagnosticsUpdater {
     private monitoredDocuments: Set<vscode.Uri>;
     constructor(private context: vscode.ExtensionContext, private validator: AssemblyValidator) {
         this.monitoredDocuments = new Set<vscode.Uri>();
-        this.collection = vscode.languages.createDiagnosticCollection(LANGUAGE_ID);
+        this.collection = vscode.languages.createDiagnosticCollection(EXTENSION_SHORT_NAME);
         context.subscriptions.push(this.collection);
         this.createSubscriptions();
     }
@@ -39,7 +41,7 @@ export class AssemblyDiagnosticManager implements AssemblyDiagnosticsUpdater {
     private createSubscriptions(): void {
         {
             const disposable = vscode.workspace.onDidCloseTextDocument(event => {
-                if (event.languageId === LANGUAGE_ID) {
+                if (LANGUAGE_IDENTIFIERS.includes(event.languageId)) {
                     this.clearDiagnostics(event.uri);
                 }
             });
@@ -47,7 +49,7 @@ export class AssemblyDiagnosticManager implements AssemblyDiagnosticsUpdater {
         }
         {
             const disposable = vscode.workspace.onDidSaveTextDocument(event => {
-                if (event.languageId === LANGUAGE_ID && shouldValidateOnSave(event.uri)) {
+                if (LANGUAGE_IDENTIFIERS.includes(event.languageId) && shouldValidateOnSave(event.uri)) {
                     this.validateDocument(event.uri);
                 }
             });
@@ -55,12 +57,24 @@ export class AssemblyDiagnosticManager implements AssemblyDiagnosticsUpdater {
         }
         {
             const disposable = vscode.workspace.onDidOpenTextDocument(event => {
-                if (event.languageId === LANGUAGE_ID && shouldValidateOnSave(event.uri)) {
+                if (LANGUAGE_IDENTIFIERS.includes(event.languageId) && shouldValidateOnSave(event.uri)) {
                     this.validateDocument(event.uri);
                 }
             });
             this.context.subscriptions.push(disposable);
         }
+        // {
+        //     // TODO
+        //     // This one would be interesting, but I think I'd have to work on debouncing and cancellation. Also,
+        //     // I would have to call `getText` on the document object to get the text, as opposed to relying on
+        //     // the disk version (as "changed" does not mean "saved").
+        //     const disposable = vscode.workspace.onDidChangeTextDocument(event => {
+        //         if (LANGUAGE_IDENTIFIERS.includes(event.document.languageId) && shouldValidateOnSave(event.document.uri)) {
+        //             this.validateDocument(event.document.uri);
+        //         }
+        //     });
+        //     this.context.subscriptions.push(disposable);
+        // }
     }
     private async validateDocument(documentUri: vscode.Uri): Promise<void> {
         try {
@@ -98,7 +112,7 @@ export class AssemblyDiagnosticManager implements AssemblyDiagnosticsUpdater {
 }
 
 const findEndOfToken = (text: string, position: vscode.Position): number | undefined => {
-    const lines = text.split("\n");
+    const lines = text.split(/\r?\n/);
     if (position.line >= lines.length) {
         return undefined;
     }

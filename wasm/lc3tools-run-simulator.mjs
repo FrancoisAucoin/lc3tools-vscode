@@ -99,7 +99,7 @@ import { readFileSync } from "node:fs";
 
 // NOTE: Using zero here means "execute on next loop event". I think that
 // this value should actually remain zero, else the terminal will feel 
-// too slow. The problem is that outputing gets delayed because it is
+// too slow. The problem is that outputting gets delayed because it is
 // processed one character at the time by the simulator.
 const SLEEP_DURATION_MS = 0;
 const FILE_EXTENSION_REGULAR_EXPRESSION = /(\.obj)$/i;
@@ -152,7 +152,7 @@ class MyInputManager {
         process.stdin.setRawMode(false);
         process.stdin.pause();
     }
-    resolveSuspention() {
+    resolveSuspension() {
         if (this.resolver) {
             const resolver = this.resolver;
             this.resolver = null;
@@ -167,7 +167,7 @@ class MyInputManager {
             }
             this.queue.push(b);
         }
-        this.resolveSuspention();
+        this.resolveSuspension();
     }
     async nextByte() {
         while (this.queue.length === 0) {
