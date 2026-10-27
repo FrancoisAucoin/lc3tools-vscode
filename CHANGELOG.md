@@ -1,3 +1,7 @@
+# 0.1.1
+
+* Working at solving a bug on Windows, where neither the assembler nor the simulator works. It looks like a path-related issue with the loading of the Emscripten modules. It appears that the `import` function in Node.js expects a file URL. While the absolute path works on UNIX systems (given that it's a valid URL component), it likely doesn't on Windows because of the drive prefix (e.g., `C:`).
+
 # 0.1.0
 
 * Added basic support for "binary" text file format.

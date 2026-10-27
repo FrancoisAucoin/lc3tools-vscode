@@ -96,6 +96,7 @@ if (!process.stdin.isTTY) {
 }
 
 import { readFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 
 // NOTE: Using zero here means "execute on next loop event". I think that
 // this value should actually remain zero, else the terminal will feel 
@@ -113,9 +114,16 @@ if (!modulePath.endsWith(".mjs")) {
     throw new Error(`Expecting module path to end with '.mjs' but got '${modulePath}'`);
 }
 
-const wasmPath = modulePath.replace(".mjs", ".wasm");
+const wasmPath = modulePath.replace(/(\.mjs)$/, ".wasm");
 
-const ModuleFactory = (await import(modulePath)).default;
+// NOTE: I am just now realizing that `import` expects a URL. While using
+// the absolute path works on UNIX systems (as the path will resolve to a
+// valid URL path component), it won't work on Windows systems, because of
+// the directory prefix (e.g., `C:\`). So here (I think) the fix is to create
+// a URL for the file and use its `href` property.
+const moduleUrl = pathToFileURL(modulePath);
+
+const ModuleFactory = (await import(moduleUrl.href)).default;
 
 const wasmBytes = readFileSync(wasmPath);
 const compiledWasmModule = await WebAssembly.compile(wasmBytes);

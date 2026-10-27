@@ -15,12 +15,20 @@
 
 import { parentPort, workerData } from "node:worker_threads";
 import { readFileSync, writeFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 import { randomUUID } from "node:crypto";
 
 /** @type {{assemblerPath: string}} */
 const { assemblerPath } = workerData;
 
-const ModuleFactory = (await import(`${assemblerPath}.mjs`)).default;
+// NOTE: I am just now realizing that `import` expects a URL. While using
+// the absolute path works on UNIX systems (as the path will resolve to a
+// valid URL path component), it won't work on Windows systems, because of
+// the directory prefix (e.g., `C:\`). So here (I think) the fix is to create
+// a URL for the file and use its `href` property.
+const assemblerUrl = pathToFileURL(`${assemblerPath}.mjs`);
+
+const ModuleFactory = (await import(assemblerUrl.href)).default;
 
 /** @type {Buffer} */
 const wasmBytes = readFileSync(`${assemblerPath}.wasm`);

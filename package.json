@@ -4,7 +4,7 @@
     "publisher": "AucoinStatsInc",
     "displayName": "LC3Tools",
     "description": "Provides support for the LC-3 ISA Assembly language and bundles a Wasm version of the LC3Tools assembler (used for validating and assembling) and simulator (used for running programs in an integrated terminal).",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "author": {
         "email": "frank@aucoinstats.com",
         "name": "François Aucoin",
