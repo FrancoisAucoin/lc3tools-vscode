@@ -1,3 +1,7 @@
+# 0.1.2
+
+* While the previous patch did fix the Wasm assembler on Windows, the Wasm simulator still wasn't working. This new update aims at fixing that. The likely cause is the direct use of `process.execPath` as a Node.js executable. While that works on POSIX systems, I am now realizing that Windows works differently in that regard (i.e., console vs GUI), and that, on Windows, I need to use the `node.exe` binary that is bundled alongside the `Code.exe` binary pointed to by `process.execPath`.
+
 # 0.1.1
 
 * Working at solving a bug on Windows, where neither the assembler nor the simulator works. It looks like a path-related issue with the loading of the Emscripten modules. It appears that the `import` function in Node.js expects a file URL. While the absolute path works on UNIX systems (given that it's a valid URL component), it likely doesn't on Windows because of the drive prefix (e.g., `C:`).

@@ -14,8 +14,8 @@
 */
 
 import * as vscode from "vscode";
-import { join as joinPath } from "node:path";
-import { tmpdir } from "node:os";
+import { join as pathJoin, dirname as pathDirname } from "node:path";
+import { tmpdir as osTmpdir, platform as osPlatform } from "node:os";
 import { writeFile, readdir, mkdtemp } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import {
@@ -67,9 +67,14 @@ const startTerminal = ({ fileURIs, jsModulePath, jsRunnerPath, terminalName, con
         shellArgs.push(`--print-level=${logLevel}`);
     }
 
+    let shellPath = process.execPath;
+    if (osPlatform() === "win32") {
+        shellPath = pathJoin(pathDirname(shellPath), "node.exe");
+    }
+
     const terminal = vscode.window.createTerminal({
         name: `Simulator: ${name}`,
-        shellPath: process.execPath,
+        shellPath,
         shellArgs,
         env: {
             ELECTRON_RUN_AS_NODE: "1"
@@ -84,8 +89,8 @@ const startTerminal = ({ fileURIs, jsModulePath, jsRunnerPath, terminalName, con
 };
 
 const createTemporaryFile = async (data: Uint8Array): Promise<{ uri: vscode.Uri }> => {
-    const basePath = await mkdtemp(joinPath(tmpdir(), EXTENSION_SHORT_NAME + "-"));
-    const filePath = joinPath(basePath, randomUUID() + ".obj");
+    const basePath = await mkdtemp(pathJoin(osTmpdir(), EXTENSION_SHORT_NAME + "-"));
+    const filePath = pathJoin(basePath, randomUUID() + ".obj");
     await writeFile(filePath, data);
     return { uri: vscode.Uri.file(filePath) };
 };
@@ -134,8 +139,8 @@ const validateAndAssembleInMemoryAndStartTerminal = async ({
 };
 
 export const registerCommands = (basePath: string): vscode.Disposable[] => {
-    const jsModulePath = joinPath(basePath, WASM_DIRECTORY, WASM_SIMULATOR_FILE);
-    const jsRunnerPath = joinPath(basePath, WASM_DIRECTORY, WASM_SIMULATOR_RUNNER);
+    const jsModulePath = pathJoin(basePath, WASM_DIRECTORY, WASM_SIMULATOR_FILE);
+    const jsRunnerPath = pathJoin(basePath, WASM_DIRECTORY, WASM_SIMULATOR_RUNNER);
 
     const disposableMultiSourceSimulator = vscode.commands.registerCommand(COMMAND_RUN_SIMULATOR_FOR_MULTIPLE_SOURCES, async () => {
         if (!vscode.workspace.workspaceFolders) {
@@ -185,7 +190,7 @@ export const registerCommands = (basePath: string): vscode.Disposable[] => {
         }
 
         const selectedUris = quickPick.selectedItems.map(item => {
-            const path = joinPath(item.detail!, item.label!);
+            const path = pathJoin(item.detail!, item.label!);
             return vscode.Uri.file(path);
         });
 
