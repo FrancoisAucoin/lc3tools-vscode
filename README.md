@@ -74,7 +74,8 @@ coloration, validation, assembly, and simulation. More to come...
 * Some occasional crashes were observed during development, but the root causes
 could not be isolated. However, it is not clear whether those crashes had to do with the extension itself or with a poisoned debugger state (in which case the extension itself wouldn't be the problem). Please feel free to [create an issue](https://github.com/FrancoisAucoin/lc3tools-vscode/issues) if you encounter a weird crash.
 * The Wasm simulator is noticeably (but not "impairingly") slower than the native simulator. The
-reasons for that are discussed [here](https://github.com/FrancoisAucoin/lc3tools-cmake-port).
+reasons for that are discussed [here](https://github.com/FrancoisAucoin/lc3tools-cmake-port). The faster
+your CPU, the less you will notice, and vice versa.
 * The simulator's terminal has minimal functionality: just enough to get things to work. It doesn't
 support features like arrow navigation and history. The limitations are discussed
 in more detail in the link provided just above.

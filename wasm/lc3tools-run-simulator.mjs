@@ -88,6 +88,10 @@
 // since LC-3 ISA assumes ASCII as well.
 // -------------------------------------------------------------------------------------------------------
 
+if (process.env.SIM_MUST_INCLUDE_SHIM) {
+    await import("./pseudo-terminal-tty-shim.mjs");
+}
+
 if (!process.stdin.isTTY) {
     // NOTE: This requirements causes us to not be allowed, using this script,
     // to call `simulator -h`, but I guess it's OK for now.

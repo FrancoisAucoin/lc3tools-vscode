@@ -14,8 +14,8 @@
 */
 
 import * as vscode from "vscode";
-import { join as pathJoin, dirname as pathDirname } from "node:path";
-import { tmpdir as osTmpdir, platform as osPlatform } from "node:os";
+import { join as pathJoin } from "node:path";
+import { tmpdir as osTmpdir } from "node:os";
 import { writeFile, readdir, mkdtemp } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import {
@@ -30,6 +30,7 @@ import {
     WASM_SIMULATOR_FILE,
     WASM_SIMULATOR_RUNNER,
 } from "./constants";
+import { createNodeBackedPseudoTerminal } from "./node-backed-pseudo-terminal";
 
 const getFileName = (uri?: vscode.Uri): string | undefined => {
     if (!uri) {
@@ -62,23 +63,15 @@ const startTerminal = ({ fileURIs, jsModulePath, jsRunnerPath, terminalName, con
 
     const name = terminalName ?? fileURIs.map(uri => getFileName(uri) ?? "?").join("_");
 
-    let shellArgs = [jsRunnerPath, jsModulePath, ...fileURIs.map(uri => uri.fsPath)];
+    let args = [jsModulePath, ...fileURIs.map(uri => uri.fsPath)];
     if (logLevel) {
-        shellArgs.push(`--print-level=${logLevel}`);
+        args.push(`--print-level=${logLevel}`);
     }
 
-    let shellPath = process.execPath;
-    if (osPlatform() === "win32") {
-        shellPath = pathJoin(pathDirname(shellPath), "node.exe");
-    }
-
-    const terminal = vscode.window.createTerminal({
+    const terminal = createNodeBackedPseudoTerminal({
         name: `Simulator: ${name}`,
-        shellPath,
-        shellArgs,
-        env: {
-            ELECTRON_RUN_AS_NODE: "1"
-        },
+        nodeEntryPointModule: jsRunnerPath,
+        args,
         location: openTerminalInEditorArea ? {
             viewColumn: vscode.ViewColumn.Active,
             preserveFocus: false,
